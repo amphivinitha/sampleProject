@@ -1,15 +1,42 @@
-node {
-      for (i=0; i<2; i++) { 
-           stage "Stage #"+i
-           print 'Hello, world !'
-           if (i==0)
-           {
-               git "https://github.com/Zulaikha12/gitnew.git"
-               echo 'Running on Stage #0'
-           }
-           else {
-               build 'Declarative pipeline'
-               echo 'Running on Stage #1'
-           }
-      }
+pipeline {
+         agent any
+         stages {
+                 stage('One') {
+                 steps {
+                     echo 'Hi, this is Zulaikha from edureka'
+                 }
+                 }
+                 stage('Two') {
+                 steps {
+                    input('Do you want to proceed?')
+                 }
+                 }
+                 stage('Three') {
+                 when {
+                       not {
+                            branch "master"
+                       }
+                 }
+                 steps {
+                       echo "Hello"
+                 }
+                 }
+                 stage('Four') {
+                 parallel { 
+                            stage('Unit Test') {
+                           steps {
+                                echo "Running the unit test..."
+                           }
+                           }
+                            stage('Integration test') {
+                              agent {
+                                    label "windows"
+                                }
+                              steps {
+                                echo "Running the integration test..."
+                              }
+                           }
+                           }
+                           }
+              }
 }
