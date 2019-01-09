@@ -38,5 +38,19 @@ pipeline {
                            }
                            }
                            }
+                  stage("windows") {
+                    agent {
+                        label "windows"
+                    }
+                    steps {
+                        bat "mvn clean install -Dconcurrency=1 -Dmaven.test.failure.ignore=true -Dcodenarc.skip=true -Djenkins.test.timeout=${TEST_TIMEOUT}"
+                    }
+                    post {
+                        always {
+                            junit testResults: '*/target/surefire-reports/*.xml', keepLongStdio: true
+                        }
+                    }
+                }
               }
+         
 }
