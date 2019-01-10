@@ -1,26 +1,23 @@
 pipeline {
-         agent any
-         stages {
-                 stage('One') {
-                 steps {
-                     echo 'Hi, this is Zulaikha from edureka'
-                 }
-                 }
-                 stage('Two') {
-                 steps {
-                    input('Do you want to proceed?')
-                 }
-                 }
-                 stage('Three') {
-                 when {
-                       not {
-                            branch "master"
-                       }
-                 }
-                 steps {
-                       echo "Hello"
-                 }
-                 }
-              }
-         
+    agent any
+    stages {
+        
+        stage("compile") {
+            steps {
+                sh 'mvn clean compile'
+            }
+        }
+        
+        stage("Testing") {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage("Build") {
+            steps {
+                sh 'mvn package'
+            }
+        }
+    }
 }
